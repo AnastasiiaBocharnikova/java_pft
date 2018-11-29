@@ -13,21 +13,14 @@ public class MyFirstProgram {
 		Rectangle r = new Rectangle(4, 6);
 		System.out.println("Площадь прямоугольника " + r.a + " и " + r.b + " = " + r.area());
 
-		Point p1 = new Point();
-		Point p2 = new Point();
-		p1.x1 = 1;
-		p1.x2 = 3;
-		p2.y1 = 1;
-		p2.y2 = 2;
-		System.out.println("Расстояние между двумя точками на плоскости = " + distance(p1, p2));
+		Strech q = new Strech(new Point(2.0, 2.0), new Point(5.0, 6.0));
+		double as = q.abstand();
+		System.out.println("Length = " + as);
 	}
 
 	public static void hello(String somebody) {
 		 System.out.println("Hello," + somebody + "!");
 	}
 
-	public static double distance(Point p1, Point p2) {
-		return Math.sqrt((p1.x2-p1.x1)*(p1.x2-p1.x1)+(p2.y2-p2.y1)*(p2.y2-p2.y1));
-	}
 
 }
