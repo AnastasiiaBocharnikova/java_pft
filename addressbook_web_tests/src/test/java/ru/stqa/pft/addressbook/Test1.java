@@ -1,14 +1,11 @@
 package ru.stqa.pft.addressbook;
 
-import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class Test1 {
   private WebDriver driver;
@@ -23,31 +20,59 @@ public class Test1 {
     baseUrl = "https://www.katalon.com/";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     driver.get("http://localhost/addressbook/");
-    driver.findElement(By.name("user")).click();
+    login("admin", "secret");
+  }
+
+  private void login(String username, String password) {
+    goToGroupPage("user");
     driver.findElement(By.name("user")).clear();
-    driver.findElement(By.name("user")).sendKeys("admin");
+    driver.findElement(By.name("user")).sendKeys(username);
     driver.findElement(By.id("LoginForm")).click();
     driver.findElement(By.name("pass")).click();
     driver.findElement(By.name("pass")).clear();
-    driver.findElement(By.name("pass")).sendKeys("secret");
+    driver.findElement(By.name("pass")).sendKeys(password);
     driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[2]")).click();
+  }
+
+  private void goToGroupPage(String user) {
+    driver.findElement(By.name(user)).click();
   }
 
   @Test
   public void test1() throws Exception {
-    driver.findElement(By.linkText("groups")).click();
-    driver.findElement(By.name("new")).click();
-    driver.findElement(By.name("group_name")).click();
-    driver.findElement(By.name("group_name")).clear();
-    driver.findElement(By.name("group_name")).sendKeys("Tesr4");
-    driver.findElement(By.name("group_header")).click();
-    driver.findElement(By.name("group_header")).clear();
-    driver.findElement(By.name("group_header")).sendKeys("qqqq");
-    driver.findElement(By.name("group_footer")).click();
-    driver.findElement(By.name("group_footer")).clear();
-    driver.findElement(By.name("group_footer")).sendKeys("qqqq");
-    driver.findElement(By.name("submit")).click();
-    driver.findElement(By.linkText("group page")).click();
+    goToGroupPage();
+    initGoupCreation();
+    fillGrupForm("Tesr4", "qqqq", "qqqq");
+    submitGroupCreation();
+    returnToGropPage();
+    }
+
+  private void returnToGropPage() {
+     driver.findElement(By.linkText("group page")).click();
+  }
+
+  private void submitGroupCreation() {
+     driver.findElement(By.name("submit")).click();
+  }
+
+  private void fillGrupForm(String name, String header, String footer) {
+     driver.findElement(By.name("group_name")).click();
+     driver.findElement(By.name("group_name")).clear();
+     driver.findElement(By.name("group_name")).sendKeys(name);
+     driver.findElement(By.name("group_header")).click();
+     driver.findElement(By.name("group_header")).clear();
+     driver.findElement(By.name("group_header")).sendKeys(header);
+     driver.findElement(By.name("group_footer")).click();
+     driver.findElement(By.name("group_footer")).clear();
+     driver.findElement(By.name("group_footer")).sendKeys(footer);
+  }
+
+  private void initGoupCreation() {
+     driver.findElement(By.name("new")).click();
+  }
+
+  private void goToGroupPage() {
+        driver.findElement(By.linkText("groups")).click();
   }
 
   @AfterClass(alwaysRun = true)
