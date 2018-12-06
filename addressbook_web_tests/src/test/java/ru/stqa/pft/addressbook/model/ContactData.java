@@ -1,10 +1,6 @@
-package ru.stqa.pft.addressbook.tests;
+package ru.stqa.pft.addressbook.model;
 
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
-
-public class NewContactRef {
+public class ContactData {
     private final String firstname;
     private final String middlename;
     private final String lastname;
@@ -12,12 +8,12 @@ public class NewContactRef {
     private final String title;
     private final String company;
     private final String address;
-    private final String homenumber;
+    private final String homephone;
     private final String bday;
     private final String bmonth;
     private final String byear;
 
-    public NewContactRef(String firstname, String middlename, String lastname, String nickname, String title, String company, String address, String homenumber, String bday, String bmonth, String byear) {
+    public ContactData(String firstname, String middlename, String lastname, String nickname, String title, String company, String address, String homephone, String bday, String bmonth, String byear) {
         this.firstname = firstname;
         this.middlename = middlename;
         this.lastname = lastname;
@@ -25,7 +21,7 @@ public class NewContactRef {
         this.title = title;
         this.company = company;
         this.address = address;
-        this.homenumber = homenumber;
+        this.homephone = homephone;
         this.bday = bday;
         this.bmonth = bmonth;
         this.byear = byear;
@@ -59,8 +55,8 @@ public class NewContactRef {
         return address;
     }
 
-    public String getHomenumber() {
-        return homenumber;
+    public String getHomephone() {
+        return homephone;
     }
 
     public String getBday() {
@@ -73,21 +69,5 @@ public class NewContactRef {
 
     public String getByear() {
         return byear;
-    }
-
-    public static class TestBase {
-
-        protected final ApplicationManager app = new ApplicationManager();
-
-        @BeforeClass(alwaysRun = true)
-        public void setUp() throws Exception {
-            app.init();
-        }
-
-        @AfterClass(alwaysRun = true)
-        public void tearDown() throws Exception {
-            app.stop();
-        }
-
     }
 }

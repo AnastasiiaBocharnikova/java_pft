@@ -2,32 +2,45 @@ package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import ru.stqa.pft.addressbook.model.GroupData;
 
-public class GroupHelper extends HelperBase{
+public class GroupHelper {
+    private WebDriver driver;
 
     public GroupHelper(WebDriver driver) {
-        super(driver);
+        this.driver = driver;
     }
 
-    public void returnToGropPage() {
-        click(By.linkText("group page"));
+    public void returnToGroupPage() {
+      driver.findElement(By.linkText("group page")).click();
     }
 
     public void submitGroupCreation() {
-       click(By.name("submit"));
+      driver.findElement(By.name("submit")).click();
     }
 
-    public void fillGrupForm(String name, String header, String footer) {
-       type(By.name("group_name"), name);
-       type(By.name("group_header"), header);
-       type(By.name("group_footer"), footer);
+    public void fillGroupForm(GroupData groupData) {
+      driver.findElement(By.name("group_name")).click();
+      driver.findElement(By.name("group_name")).clear();
+      driver.findElement(By.name("group_name")).sendKeys(groupData.getName());
+      driver.findElement(By.name("group_header")).click();
+      driver.findElement(By.name("group_header")).clear();
+      driver.findElement(By.name("group_header")).sendKeys(groupData.getHeader());
+      driver.findElement(By.name("group_footer")).click();
+      driver.findElement(By.name("group_footer")).clear();
+      driver.findElement(By.name("group_footer")).sendKeys(groupData.getFooter());
+      driver.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Groups'])[1]/following::form[1]")).click();
     }
 
-    public void initGoupCreation() {
-        click(By.name("new"));
+    public void initGroupCreation() {
+      driver.findElement(By.name("new")).click();
+    }
+
+    public void deleteSelectedGroups() {
+      driver.findElement(By.name("delete")).click();
     }
 
     public void selectGroup() {
-        click(By.name("selected[]"));
+      driver.findElement(By.name("selected[]")).click();
     }
 }

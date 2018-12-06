@@ -9,11 +9,12 @@ import static org.testng.Assert.fail;
 
 public class ApplicationManager {
 
-    public WebDriver driver;
+    protected WebDriver driver;
 
+    private ContactHelper contactHelper;
     private SessionHelper sessionHelper;
     private NavigationHelper navigationHelper;
-    private GroupHelper groupHelper;
+    private  GroupHelper groupHelper;
     private String baseUrl;
     private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
@@ -23,16 +24,12 @@ public class ApplicationManager {
         driver = new ChromeDriver();
         baseUrl = "https://www.katalon.com/";
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.get("http://localhost/addressbook/group.php");
         groupHelper = new GroupHelper(driver);
-        driver.get("http://localhost/addressbook/");
         navigationHelper = new NavigationHelper(driver);
         sessionHelper = new SessionHelper(driver);
+        contactHelper = new ContactHelper(driver);
         sessionHelper.login("admin", "secret");
-    }
-
-
-    private void goToGroupPage(String user) {
-      driver.findElement(By.name(user)).click();
     }
 
     public void stop() {
@@ -52,7 +49,16 @@ public class ApplicationManager {
       }
     }
 
-      private String closeAlertAndGetItsText() {
+    private boolean isAlertPresent() {
+      try {
+        driver.switchTo().alert();
+        return true;
+      } catch (NoAlertPresentException e) {
+        return false;
+      }
+    }
+
+    private String closeAlertAndGetItsText() {
       try {
         Alert alert = driver.switchTo().alert();
         String alertText = alert.getText();
@@ -67,15 +73,19 @@ public class ApplicationManager {
       }
     }
 
-    public void deleteSelectedGroups() {
-      driver.findElement(By.name("delete")).click();
-    }
-
     public GroupHelper getGroupHelper() {
         return groupHelper;
     }
 
     public NavigationHelper getNavigationHelper() {
         return navigationHelper;
+    }
+
+    public SessionHelper getSessionHelper() {
+        return sessionHelper;
+    }
+
+    public ContactHelper getContactHelper() {
+        return contactHelper;
     }
 }
