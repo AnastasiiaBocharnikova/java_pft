@@ -3,17 +3,17 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class NavigationHelper {
-    private WebDriver driver;
+public class NavigationHelper extends HelperBase {
 
     public NavigationHelper(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    public void gotoGroupPage() { driver.findElement(By.linkText("groups")).click();
+    public void goToGroupPage() {
+      click(By.linkText("groups"));
     }
 
-    public void gotoContactPage() {
-      driver.findElement(By.linkText("add new")).click();
+    public void goToContactPage() {
+      click(By.linkText("add new"));
     }
 }

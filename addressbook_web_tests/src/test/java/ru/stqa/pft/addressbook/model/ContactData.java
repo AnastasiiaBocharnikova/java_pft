@@ -28,46 +28,57 @@ public class ContactData {
     }
 
     public String getFirstname() {
+
         return firstname;
     }
 
     public String getMiddlename() {
+
         return middlename;
     }
 
     public String getLastname() {
+
         return lastname;
     }
 
     public String getNickname() {
+
         return nickname;
     }
 
     public String getTitle() {
+
         return title;
     }
 
     public String getCompany() {
+
         return company;
     }
 
     public String getAddress() {
+
         return address;
     }
 
     public String getHomephone() {
+
         return homephone;
     }
 
     public String getBday() {
+
         return bday;
     }
 
     public String getBmonth() {
+
         return bmonth;
     }
 
     public String getByear() {
+
         return byear;
     }
 }

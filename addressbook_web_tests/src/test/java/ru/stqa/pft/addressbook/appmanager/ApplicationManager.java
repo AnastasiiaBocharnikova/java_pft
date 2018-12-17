@@ -1,22 +1,22 @@
 package ru.stqa.pft.addressbook.appmanager;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.util.concurrent.TimeUnit;
-
 import static org.testng.Assert.fail;
 
 public class ApplicationManager {
-
     protected WebDriver driver;
 
-    private ContactHelper contactHelper;
-    private SessionHelper sessionHelper;
     private NavigationHelper navigationHelper;
-    private  GroupHelper groupHelper;
+    private SessionHelper sessionHelper;
+    private ContactHelper contactHelper;
+    private GroupHelper groupHelper;
     private String baseUrl;
-    private boolean acceptNextAlert = true;
     private StringBuffer verificationErrors = new StringBuffer();
 
     public void init() {
@@ -24,13 +24,14 @@ public class ApplicationManager {
         driver = new ChromeDriver();
         baseUrl = "https://www.katalon.com/";
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.get("http://localhost/addressbook/group.php");
+        driver.get("http://localhost/addressbook/");
         groupHelper = new GroupHelper(driver);
+        contactHelper = new ContactHelper(driver);
         navigationHelper = new NavigationHelper(driver);
         sessionHelper = new SessionHelper(driver);
-        contactHelper = new ContactHelper(driver);
         sessionHelper.login("admin", "secret");
     }
+
 
     public void stop() {
         driver.quit();
@@ -58,34 +59,15 @@ public class ApplicationManager {
       }
     }
 
-    private String closeAlertAndGetItsText() {
-      try {
-        Alert alert = driver.switchTo().alert();
-        String alertText = alert.getText();
-        if (acceptNextAlert) {
-          alert.accept();
-        } else {
-          alert.dismiss();
-        }
-        return alertText;
-      } finally {
-        acceptNextAlert = true;
-      }
-    }
-
     public GroupHelper getGroupHelper() {
         return groupHelper;
     }
 
-    public NavigationHelper getNavigationHelper() {
-        return navigationHelper;
-    }
-
-    public SessionHelper getSessionHelper() {
-        return sessionHelper;
-    }
-
     public ContactHelper getContactHelper() {
         return contactHelper;
+    }
+
+    public NavigationHelper getNavigationHelper() {
+        return navigationHelper;
     }
 }
