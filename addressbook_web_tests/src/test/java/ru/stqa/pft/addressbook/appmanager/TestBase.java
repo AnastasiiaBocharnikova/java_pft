@@ -2,7 +2,7 @@ package ru.stqa.pft.addressbook.appmanager;
 
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
+
 
 public class TestBase {
 
@@ -19,6 +19,7 @@ public class TestBase {
     }
 
     public ApplicationManager getApplicationManager() {
+
         return applicationManager;
     }
 }

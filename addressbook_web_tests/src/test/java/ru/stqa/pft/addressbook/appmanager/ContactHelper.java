@@ -3,7 +3,6 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Select;
 
 import static org.testng.Assert.assertTrue;
 
@@ -16,14 +15,16 @@ public class ContactHelper extends HelperBase {
     }
 
     public void returnToHomePage() {
-      driver.findElement(By.linkText("home page")).click();
+
+        click(By.linkText("home page"));
     }
 
     public void submitContactCreation() {
-      driver.findElement(By.xpath("(//input[@name='submit'])[2]")).click();
+
+        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Notes:'])[1]/following::input[1]"));
     }
 
-    public void fillContactForm(String firstname, String middlename, String lastname, String nickname, String title, String company, String address, String homephone, String bday, String bmonth, String byear) {
+    public void fillContactForm(String firstname, String middlename, String lastname, String nickname, String title, String company, String address, String homephone) {
       type(By.name("firstname"), firstname);
       type(By.name("middlename"), middlename);
       type(By.name("lastname"), lastname);
@@ -32,24 +33,7 @@ public class ContactHelper extends HelperBase {
       type(By.name("company"), company);
       type(By.name("address"), address);
       type(By.name("home"), homephone);
-      selectData(By.name("bday"), bday);
-      selectMonth(By.name("bmonth"), "January");
-      type(By.name("byear"), byear);
-      click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Notes:'])[1]/following::input[1]"));
     }
-
-    private void selectMonth(By locator, String text) {
-        driver.findElement(locator).click();
-        new Select(driver.findElement(locator)).selectByVisibleText(text);
-        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Birthday:'])[1]/following::option[35]"));
-    }
-
-    private void selectData(By locator, String text) {
-        driver.findElement(locator).click();
-        new Select(driver.findElement(locator)).selectByVisibleText(text);
-        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Birthday:'])[1]/following::option[17]"));
-    }
-
 
     public void deleteSelectedContact() {
       acceptNextAlert = true;
@@ -58,7 +42,7 @@ public class ContactHelper extends HelperBase {
     }
 
     public void selectContact() {
-        driver.findElement(By.id("1")).click();
+       click(By.id("1"));
     }
 
     private String closeAlertAndGetItsText() {
@@ -76,4 +60,15 @@ public class ContactHelper extends HelperBase {
         }
     }
 
+    public void submitContactEditForm() {
+        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='address'])[4]/following::img[2]"));
+    }
+
+    public void submitContactModification() {
+        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Notes:'])[1]/following::input[1]"));
+    }
+
+    public void selectModificationContact() {
+        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='import'])[1]/following::td[1]"));
+    }
 }
