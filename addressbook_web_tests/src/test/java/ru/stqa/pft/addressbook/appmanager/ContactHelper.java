@@ -3,6 +3,9 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+import ru.stqa.pft.addressbook.model.ContactData;
 
 import static org.testng.Assert.assertTrue;
 
@@ -24,15 +27,21 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Notes:'])[1]/following::input[1]"));
     }
 
-    public void fillContactForm(String firstname, String middlename, String lastname, String nickname, String title, String company, String address, String homephone) {
-      type(By.name("firstname"), firstname);
-      type(By.name("middlename"), middlename);
-      type(By.name("lastname"), lastname);
-      type(By.name("nickname"), nickname);
-      type(By.name("title"), title);
-      type(By.name("company"), company);
-      type(By.name("address"), address);
-      type(By.name("home"), homephone);
+    public void fillContactForm(ContactData contactData, boolean creation) {
+      type(By.name("firstname"), contactData.getFirstname());
+      type(By.name("middlename"), contactData.getMiddlename());
+      type(By.name("lastname"), contactData.getLastname());
+      type(By.name("nickname"), contactData.getNickname());
+      type(By.name("title"), contactData.getNickname());
+      type(By.name("company"), contactData.getCompany());
+      type(By.name("address"), contactData.getAddress());
+      type(By.name("home"), contactData.getHomephone());
+
+      if (creation) {
+          new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      } else {
+          Assert.assertFalse(isElementPresent(By.name("new_group")));
+      }
     }
 
     public void deleteSelectedContact() {
@@ -70,5 +79,15 @@ public class ContactHelper extends HelperBase {
 
     public void selectModificationContact() {
         click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='import'])[1]/following::td[1]"));
+    }
+
+    public void createContact(ContactData contact, boolean b) {
+        fillContactForm(contact, b);
+        submitContactCreation();
+        returnToHomePage();
+    }
+
+    public boolean isThereAContact() {
+        return isElementPresent(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='import'])[1]/following::td[1]"));
     }
 }
