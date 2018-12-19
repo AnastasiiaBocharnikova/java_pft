@@ -50,8 +50,8 @@ public class ContactHelper extends HelperBase {
       assertTrue(closeAlertAndGetItsText().matches("^Delete 1 addresses[\\s\\S]$"));
     }
 
-    public void selectContact() {
-       click(By.id("1"));
+    public void selectContact(int index) {
+        driver.findElements(By.name("selected[]")).get(index).click();
     }
 
     private String closeAlertAndGetItsText() {
@@ -69,16 +69,16 @@ public class ContactHelper extends HelperBase {
         }
     }
 
-    public void submitContactEditForm() {
-        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='address'])[4]/following::img[2]"));
-    }
+//     public void submitContactEditForm() {
+//         click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='address'])[4]/following::img[2]"));
+//     }
 
     public void submitContactModification() {
         click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Notes:'])[1]/following::input[1]"));
     }
 
-    public void selectModificationContact() {
-        click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='import'])[1]/following::td[1]"));
+    public void selectModificationContact(int index) {
+        driver.findElements(By.xpath("(.//*[normalize-space(text())])[1]/following::img[@title='Edit']")).get(index).click();
     }
 
     public void createContact(ContactData contact, boolean b) {
@@ -89,5 +89,9 @@ public class ContactHelper extends HelperBase {
 
     public boolean isThereAContact() {
         return isElementPresent(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='import'])[1]/following::td[1]"));
+    }
+
+    public int getContactCount() {
+        return driver.findElements(By.name("selected[]")).size();
     }
 }
