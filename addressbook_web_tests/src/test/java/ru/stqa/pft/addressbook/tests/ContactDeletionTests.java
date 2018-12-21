@@ -18,6 +18,7 @@ public class ContactDeletionTests extends TestBase {
     List<ContactData> before = applicationManager.getContactHelper().getContactList();
     applicationManager.getContactHelper().selectContact(before.size() - 1);
     applicationManager.getContactHelper().deleteSelectedContact();
+    Thread.sleep(3000);
     List<ContactData> after = applicationManager.getContactHelper().getContactList();
     Assert.assertEquals(after.size(), before.size() - 1);
 
