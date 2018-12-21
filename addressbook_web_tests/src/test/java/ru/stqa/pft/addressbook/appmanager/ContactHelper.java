@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +106,8 @@ public class ContactHelper extends HelperBase {
             String lastname = element.getText();
             String firstname = element.getText();
             String address = element.getText();
-            ContactData contact = new ContactData(firstname, null, lastname, null, null, null, address, null, null, null, null, null);
+            int id = Integer.parseInt(driver.findElement(By.cssSelector("[title*='Select']")).getAttribute("value"));
+            ContactData contact = new ContactData(id, firstname, null, lastname, null, null, null, address, null, null, null, null, null);
             contacts.add(contact);
         }
         return contacts;
