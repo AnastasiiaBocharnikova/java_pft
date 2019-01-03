@@ -1,29 +1,38 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.appmanager.TestBase;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.List;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class ContactDeletionTests extends TestBase {
 
+  @BeforeMethod
+  public void ensurePreconditions() {
+    if (applicationManager.contact().all().size() == 0) {
+      applicationManager.goTo().сontactPage();
+      applicationManager.contact().create(new ContactData()
+              .withFirstname("Testname").withMiddlename("TN").withLastname("TestLastName").withNickname("nick")
+              .withTitle("111").withCompany("company").withAddress("address").withHomephone("000000000").withBday("15")
+              .withBmonth("October").withByear("1992").withGroup("test11"), true);
+    }
+  }
+
   @Test
   public void testContactDeletion() throws Exception {
-    if (! applicationManager.getContactHelper().isThereAContact()) {
-      applicationManager.getNavigationHelper().goToContactPage();
-      applicationManager.getContactHelper().createContact(new ContactData("Testname", "TN", "TestLastName", "nick", "111", "company", "address", "000000000", "15", "October", "1992", "test11"), true);
-    }
-    List<ContactData> before = applicationManager.getContactHelper().getContactList();
-    applicationManager.getContactHelper().selectContact(before.size() - 1);
-    applicationManager.getContactHelper().deleteSelectedContact();
+    Contacts before = applicationManager.contact().all();
+    ContactData deletedContact = before.iterator().next();
+    applicationManager.contact().delete(deletedContact);
     Thread.sleep(3000);
-    List<ContactData> after = applicationManager.getContactHelper().getContactList();
-    Assert.assertEquals(after.size(), before.size() - 1);
-
-    before.remove(before.size() - 1);
-    Assert.assertEquals(before, after);
+    assertEquals(applicationManager.contact().count(), before.size() - 1);
+    Contacts after = applicationManager.contact().all();
+    assertThat(after, equalTo(before.without(deletedContact)));
   }
+
 
 }

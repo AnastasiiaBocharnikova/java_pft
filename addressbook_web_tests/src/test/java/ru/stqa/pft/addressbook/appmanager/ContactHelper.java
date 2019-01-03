@@ -7,8 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.testng.Assert.assertTrue;
@@ -48,14 +48,23 @@ public class ContactHelper extends HelperBase {
       }
     }
 
-    public void deleteSelectedContact() {
-      acceptNextAlert = true;
-      click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Select all'])[1]/following::input[2]"));
-      assertTrue(closeAlertAndGetItsText().matches("^Delete 1 addresses[\\s\\S]$"));
+    public void modify(ContactData contact) {
+         selectModificationContactById(contact.getId());
+         fillContactForm(contact, false);
+         submitContactModification();
+         contactCache = null;
+         returnToHomePage();
     }
 
-    public void selectContact(int index) {
-        driver.findElements(By.name("selected[]")).get(index).click();
+    public void deleteSelectedContact() {
+         acceptNextAlert = true;
+         click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Select all'])[1]/following::input[2]"));
+         contactCache = null;
+         assertTrue(closeAlertAndGetItsText().matches("^Delete 1 addresses[\\s\\S]$"));
+    }
+
+    public void selectContactById(int id) {
+        driver.findElement(By.cssSelector("input[value='" + id + "']")).click();
     }
 
     private String closeAlertAndGetItsText() {
@@ -81,35 +90,48 @@ public class ContactHelper extends HelperBase {
         click(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Notes:'])[1]/following::input[1]"));
     }
 
-    public void selectModificationContact(int index) {
-        driver.findElements(By.xpath("(.//*[normalize-space(text())])[1]/following::img[@title='Edit']")).get(index).click();
+    private void selectModificationContactById(int id) {
+        driver.findElement(By.xpath("(.//*[normalize-space(text())])[1]/following::img[@title='Edit']")).click();
     }
 
-    public void createContact(ContactData contact, boolean b) {
+    public void create(ContactData contact, boolean b) {
         fillContactForm(contact, b);
         submitContactCreation();
+        contactCache = null;
         returnToHomePage();
     }
 
-    public boolean isThereAContact() {
-        return isElementPresent(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='import'])[1]/following::td[1]"));
+    public void delete(ContactData contact) {
+        selectContactById(contact.getId());
+        contactCache = null;
+        deleteSelectedContact();
     }
 
-    public int getContactCount() {
+//    public boolean isThereAContact() {
+//        return isElementPresent(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='import'])[1]/following::td[1]"));
+//    }
+//
+    public int count() {
         return driver.findElements(By.name("selected[]")).size();
     }
 
-    public List<ContactData> getContactList() {
-        List<ContactData> contacts = new ArrayList<ContactData>();
-        List<WebElement> elements = driver.findElements(By.cssSelector("[title*='Select']"));
-        for (WebElement element : elements) {
-            String lastname = element.getText();
-            String firstname = element.getText();
-            String address = element.getText();
-            int id = Integer.parseInt(driver.findElement(By.cssSelector("[title*='Select']")).getAttribute("value"));
-            ContactData contact = new ContactData(id, firstname, null, lastname, null, null, null, address, null, null, null, null, null);
-            contacts.add(contact);
+    private Contacts contactCache = null;
+
+    public Contacts all() {
+        if (contactCache != null) {
+            return new Contacts(contactCache);
         }
-        return contacts;
+        contactCache = new Contacts();
+        List<WebElement> rows = driver.findElements(By.xpath("//tr[@name='entry']"));
+        for (WebElement element : rows) {
+            List<WebElement> cells = element.findElements(By.cssSelector("td"));
+            String lastname = cells.get(1).getText();
+            String firstname = cells.get(2).getText();
+            String address = cells.get(3).getText();
+            int id = Integer.parseInt(cells.get(0).findElement(By.cssSelector("input")).getAttribute("id"));
+            contactCache.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname).withAddress(address));
+        }
+        return new Contacts(contactCache);
     }
+
 }

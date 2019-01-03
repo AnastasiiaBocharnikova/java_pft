@@ -1,34 +1,37 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.appmanager.TestBase;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.HashSet;
-import java.util.List;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase {
 
 
   @Test
   public void testContactCreation() throws Exception {
-    List<ContactData> before = applicationManager.getContactHelper().getContactList();
-    applicationManager.getNavigationHelper().goToContactPage();
-    ContactData contact = new ContactData("Testname", "TN", "TestLastName", "nick", "111", "company", "address", "000000000", "15", "October", "1992", "test11");
-    applicationManager.getContactHelper().createContact(contact, true);
-    List<ContactData> after = applicationManager.getContactHelper().getContactList();
-    Assert.assertEquals(after.size(), before.size() + 1);
+    Contacts before = applicationManager.contact().all();
+    applicationManager.goTo().сontactPage();
+    ContactData contact = new ContactData()
+            .withFirstname("Testname").withMiddlename("TN").withLastname("TestLastName").withNickname("nick")
+            .withTitle("111").withCompany("company").withAddress("address").withHomephone("000000000").withBday("15")
+            .withBmonth("October").withByear("1992").withGroup("test11");
+    applicationManager.contact().create(contact, true);
+    assertThat(applicationManager.contact().count(), equalTo(before.size() + 1));
+    Contacts after = applicationManager.contact().all();
 
-    int max = 0;
-    for (ContactData g : after) {
-      if (g.getId() > max) {
-        max = g.getId();
-      }
-    }
-    contact.setId(max);
-    before.add(contact);
-    Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after));
+//    int max = 0;
+//    for (ContactData c : after) {
+//      if (c.getId() > max) {
+//        max = c.getId();
+//      }
+//    }
+
+    assertThat(after, equalTo(
+            before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
   }
 
 }
