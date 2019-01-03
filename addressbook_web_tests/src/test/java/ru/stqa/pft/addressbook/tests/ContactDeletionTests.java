@@ -18,7 +18,7 @@ public class ContactDeletionTests extends TestBase {
       applicationManager.goTo().сontactPage();
       applicationManager.contact().create(new ContactData()
               .withFirstname("Testname").withMiddlename("TN").withLastname("TestLastName").withNickname("nick")
-              .withTitle("111").withCompany("company").withAddress("address").withHomephone("000000000").withBday("15")
+              .withTitle("111").withCompany("company").withAddress("address").withHomephone("0000").withMobile("1111").withWorkphone("22222").withBday("15")
               .withBmonth("October").withByear("1992").withGroup("test11"), true);
     }
   }

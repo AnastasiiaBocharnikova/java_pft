@@ -21,10 +21,6 @@ public class ContactHelper extends HelperBase {
         super(driver);
     }
 
-    public void returnToHomePage() {
-
-        click(By.linkText("home page"));
-    }
 
     public void submitContactCreation() {
 
@@ -32,20 +28,27 @@ public class ContactHelper extends HelperBase {
     }
 
     public void fillContactForm(ContactData contactData, boolean creation) {
-      type(By.name("firstname"), contactData.getFirstname());
-      type(By.name("middlename"), contactData.getMiddlename());
-      type(By.name("lastname"), contactData.getLastname());
-      type(By.name("nickname"), contactData.getNickname());
-      type(By.name("title"), contactData.getNickname());
-      type(By.name("company"), contactData.getCompany());
-      type(By.name("address"), contactData.getAddress());
-      type(By.name("home"), contactData.getHomephone());
+        type(By.name("firstname"), contactData.getFirstname());
+        type(By.name("middlename"), contactData.getMiddlename());
+        type(By.name("lastname"), contactData.getLastname());
+        type(By.name("nickname"), contactData.getNickname());
+        type(By.name("title"), contactData.getNickname());
+        type(By.name("company"), contactData.getCompany());
+        type(By.name("address"), contactData.getAddress());
+        type(By.name("home"), contactData.getHomephone());
+        type(By.name("mobile"), contactData.getMobile());
+        type(By.name("work"), contactData.getWorkphone());
 
       if (creation) {
           new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
       } else {
           Assert.assertFalse(isElementPresent(By.name("new_group")));
       }
+    }
+
+    public void returnToHomePage() {
+
+        click(By.linkText("home page"));
     }
 
     public void modify(ContactData contact) {
@@ -91,7 +94,7 @@ public class ContactHelper extends HelperBase {
     }
 
     private void selectModificationContactById(int id) {
-        driver.findElement(By.xpath("(.//*[normalize-space(text())])[1]/following::img[@title='Edit']")).click();
+        driver.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
     }
 
     public void create(ContactData contact, boolean b) {
@@ -128,10 +131,23 @@ public class ContactHelper extends HelperBase {
             String lastname = cells.get(1).getText();
             String firstname = cells.get(2).getText();
             String address = cells.get(3).getText();
+            String[] phones = cells.get(5).getText().split("\n");
             int id = Integer.parseInt(cells.get(0).findElement(By.cssSelector("input")).getAttribute("id"));
-            contactCache.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname).withAddress(address));
+            contactCache.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname).withAddress(address)
+                    .withHomephone(phones[0]).withMobile(phones[1]).withWorkphone(phones[2]));
         }
         return new Contacts(contactCache);
     }
 
+    public ContactData infoFromEditForm(ContactData contact) {
+        selectModificationContactById(contact.getId());
+        String firstname = driver.findElement(By.name("firstname")).getAttribute("value");
+        String lastname = driver.findElement(By.name("lastname")).getAttribute("value");
+        String homephone = driver.findElement(By.name("home")).getAttribute("value");
+        String mobile = driver.findElement(By.name("mobile")).getAttribute("value");
+        String workphone = driver.findElement(By.name("work")).getAttribute("value");
+        driver.navigate().back();
+        return new ContactData().withId(
+                contact.getId()).withFirstname(firstname).withLastname(lastname).withHomephone(homephone).withMobile(mobile).withWorkphone(workphone);
+    }
 }
