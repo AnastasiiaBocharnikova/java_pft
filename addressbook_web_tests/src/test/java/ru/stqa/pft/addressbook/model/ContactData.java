@@ -21,6 +21,8 @@ public class ContactData {
     private String bmonth;
     private String byear;
     private String group;
+    private String allPhones;
+    private String allEmails;
 
     public int getId() {
         return id;
@@ -86,6 +88,11 @@ public class ContactData {
         return email2;
     }
 
+    public String getAllEmails() {
+        return allEmails;
+    }
+
+
     public String getBday() {
 
         return bday;
@@ -105,6 +112,10 @@ public class ContactData {
         return group;
     }
 
+    public String getAllPhones() {
+        return allPhones;
+    }
+
     @Override
     public String toString() {
         return "ContactData{" +
@@ -116,6 +127,11 @@ public class ContactData {
 
     public ContactData withId(int id) {
         this.id = id;
+        return this;
+    }
+
+    public ContactData withAllPhones(String allPhones) {
+        this.allPhones = allPhones;
         return this;
     }
 
@@ -184,6 +200,11 @@ public class ContactData {
         return this;
     }
 
+    public ContactData withAllEmails(String allEmails) {
+        this.allEmails = allEmails;
+        return this;
+    }
+
     public ContactData withBday(String bday) {
         this.bday = bday;
         return this;
@@ -219,4 +240,5 @@ public class ContactData {
     public int hashCode() {
         return Objects.hash(id, firstname, lastname, address);
     }
+
 }

@@ -135,11 +135,11 @@ public class ContactHelper extends HelperBase {
             String lastname = cells.get(1).getText();
             String firstname = cells.get(2).getText();
             String address = cells.get(3).getText();
-            String[] phones = cells.get(5).getText().split("\n");
-            String[] emails = cells.get(4).getText().split("\n");
+            String allPhones = cells.get(5).getText();
+            String allEmails = cells.get(4).getText();
             int id = Integer.parseInt(cells.get(0).findElement(By.cssSelector("input")).getAttribute("id"));
             contactCache.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname).withAddress(address)
-                    .withHomephone(phones[0]).withMobile(phones[1]).withWorkphone(phones[2]).withEmail(emails[0]).withEmail1(emails[1]).withEmail2(emails[2]));
+                    .withAllPhones(allPhones).withAllEmails(allEmails));
         }
         return new Contacts(contactCache);
     }
