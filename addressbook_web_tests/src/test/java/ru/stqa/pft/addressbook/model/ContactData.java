@@ -14,6 +14,9 @@ public class ContactData {
     private String homephone;
     private String mobile;
     private String workphone;
+    private String email;
+    private String email1;
+    private String email2;
     private String bday;
     private String bmonth;
     private String byear;
@@ -69,6 +72,18 @@ public class ContactData {
 
     public String getWorkphone() {
         return workphone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getEmail1() {
+        return email1;
+    }
+
+    public String getEmail2() {
+        return email2;
     }
 
     public String getBday() {
@@ -154,6 +169,21 @@ public class ContactData {
         return this;
     }
 
+    public ContactData withEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public ContactData withEmail1(String email1) {
+        this.email1 = email1;
+        return this;
+    }
+
+    public ContactData withEmail2(String email2) {
+        this.email2 = email2;
+        return this;
+    }
+
     public ContactData withBday(String bday) {
         this.bday = bday;
         return this;
@@ -182,14 +212,11 @@ public class ContactData {
         return id == that.id &&
                 Objects.equals(firstname, that.firstname) &&
                 Objects.equals(lastname, that.lastname) &&
-                Objects.equals(address, that.address) &&
-                Objects.equals(homephone, that.homephone) &&
-                Objects.equals(mobile, that.mobile) &&
-                Objects.equals(workphone, that.workphone);
+                Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname, address, homephone, mobile, workphone);
+        return Objects.hash(id, firstname, lastname, address);
     }
 }
