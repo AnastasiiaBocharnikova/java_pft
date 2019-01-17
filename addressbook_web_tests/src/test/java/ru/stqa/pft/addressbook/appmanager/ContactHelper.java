@@ -41,13 +41,13 @@ public class ContactHelper extends HelperBase {
         type(By.name("email"), contactData.getEmail());
         type(By.name("email2"), contactData.getEmail1());
         type(By.name("email3"), contactData.getEmail2());
-//        attach(By.name("photo"), contactData.getPhoto());
+        attach(By.name("photo"), contactData.getPhoto());
 
-//      if (creation) {
-//          new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-//      } else {
-//          Assert.assertFalse(isElementPresent(By.name("new_group")));
-//      }
+      if (creation) {
+          new Select(driver.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      } else {
+          Assert.assertFalse(isElementPresent(By.name("new_group")));
+      }
     }
 
     public void returnToHomePage() {
